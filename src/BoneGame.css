@@ -1,0 +1,149 @@
+/* ── 전역 ────────────────────────────────────────────────── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  overflow: hidden;
+  background: #E8DFC8;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ── 로딩 화면 ───────────────────────────────────────────── */
+.loading {
+  width: 100vw; height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: #E8DFC8;
+}
+.loading-inner { text-align: center; color: #5a4a2f; }
+.dino-icon {
+  font-size: 72px;
+  animation: bounce 1s ease-in-out infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-14px); }
+}
+.loading p { margin-top: 16px; font-size: 20px; letter-spacing: 0.04em; }
+
+/* ── 게임 영역 ───────────────────────────────────────────── */
+.game-container {
+  position: fixed; inset: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle, rgba(160,140,100,0.22) 1.5px, transparent 1.5px),
+    #E8DFC8;
+  background-size: 30px 30px;
+  touch-action: none;
+}
+
+/* ── 뼈 조각 ─────────────────────────────────────────────── */
+.bone-piece {
+  position: absolute;
+  touch-action: none;
+  transition: filter 0.15s;
+}
+
+.bone-piece:hover {
+  filter: drop-shadow(0 0 10px rgba(80,160,255,0.75));
+}
+
+/* ── 선택된 뼈: 점선 가이드라인 ────────────────────────────── */
+.bone-selected {
+  outline: 2px dashed rgba(60, 130, 255, 0.75);
+  outline-offset: 6px;
+  border-radius: 4px;
+}
+
+/* ── 회전 핸들 (위치는 JSX 인라인으로 지정) ─────────────────── */
+.rotate-handle {
+  width: 26px; height: 26px;
+  background: rgba(100, 60, 20, 0.85);
+  color: #f5e8c8;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: bold;
+  cursor: grab;
+  z-index: 9999;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  transition: background 0.15s;
+  user-select: none;
+}
+.rotate-handle:hover  { background: rgba(70, 35, 5, 1); }
+.rotate-handle:active { cursor: grabbing; }
+
+/* ── UI 패널 ─────────────────────────────────────────────── */
+.ui-panel {
+  position: fixed; top: 14px; left: 14px;
+  background: rgba(255, 252, 238, 0.93);
+  border: 2px solid #c4a84a;
+  border-radius: 16px;
+  padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 8px;
+  z-index: 99999;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+}
+.ui-title {
+  font-size: 14px; font-weight: 700;
+  color: #5a3d1a; letter-spacing: 0.04em;
+}
+
+.ui-btn {
+  background: #7a5020;
+  color: #f5e8c8;
+  border: none; border-radius: 9px;
+  padding: 7px 12px;
+  font-size: 12px; font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.ui-btn:hover  { background: #5a3810; transform: translateY(-1px); }
+.ui-btn:active { transform: translateY(0); }
+.answer-btn    { background: #4a6830; }
+.answer-btn:hover { background: #324818; }
+
+/* ── 정답 모달 ───────────────────────────────────────────── */
+.answer-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 999999;
+  animation: fadeIn 0.25s ease;
+}
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+.answer-box {
+  background: #fffcef;
+  border-radius: 16px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex; flex-direction: column;
+  animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes popIn {
+  from { transform: scale(0.8); opacity:0; }
+  to   { transform: scale(1);   opacity:1; }
+}
+.answer-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px;
+  background: #7a5020;
+  color: #f5e8c8;
+  font-size: 15px; font-weight: 700;
+}
+.answer-close {
+  background: none; border: none;
+  color: #f5e8c8; font-size: 18px;
+  cursor: pointer; line-height: 1;
+  padding: 2px 6px; border-radius: 4px;
+}
+.answer-close:hover { background: rgba(255,255,255,0.2); }
+.answer-img {
+  display: block;
+  max-width: 80vw;
+  max-height: 80vh;
+  object-fit: contain;
+}
