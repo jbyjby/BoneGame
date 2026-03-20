@@ -63,6 +63,10 @@ export default function BoneGame() {
   const [loaded, setLoaded]     = useState(false)
   const [selectedBone, setSelectedBone] = useState(null)
   const [showAnswer, setShowAnswer]     = useState(false)
+  const [showQuiz, setShowQuiz]         = useState(false)
+  const [quiz, setQuiz]                 = useState({ a: 0, b: 0 })
+  const [quizInput, setQuizInput]       = useState('')
+  const [quizWrong, setQuizWrong]       = useState(false)
 
   const dragRef  = useRef(null)
   const rotRef   = useRef(null)
@@ -181,6 +185,27 @@ export default function BoneGame() {
     })
   }, [])
 
+  // ── 퀴즈 열기 ────────────────────────────────────────────────────────
+  const openQuiz = useCallback(() => {
+    const a = Math.floor(Math.random() * 50) + 20
+    const b = Math.floor(Math.random() * 50) + 20
+    setQuiz({ a, b })
+    setQuizInput('')
+    setQuizWrong(false)
+    setShowQuiz(true)
+  }, [])
+
+  // ── 퀴즈 제출 ────────────────────────────────────────────────────────
+  const submitQuiz = useCallback(() => {
+    if (parseInt(quizInput, 10) === quiz.a + quiz.b) {
+      setShowQuiz(false)
+      setShowAnswer(true)
+    } else {
+      setQuizWrong(true)
+      setQuizInput('')
+    }
+  }, [quizInput, quiz])
+
   if (!loaded) {
     return (
       <div className="loading">
@@ -247,8 +272,34 @@ export default function BoneGame() {
       <div className="ui-panel">
         <div className="ui-title">🦖 공룡 뼈 맞추기</div>
         <button className="ui-btn" onClick={reset}>🔄 다시 시작</button>
-        <button className="ui-btn answer-btn" onClick={() => setShowAnswer(true)}>🦴 정답 보기</button>
+        <button className="ui-btn answer-btn" onClick={openQuiz}>🦴 정답 보기</button>
       </div>
+
+      {/* 퀴즈 모달 */}
+      {showQuiz && (
+        <div className="answer-overlay" onClick={() => setShowQuiz(false)}>
+          <div className="answer-box quiz-box" onClick={e => e.stopPropagation()}>
+            <div className="answer-header">
+              <span>🧮 암산 문제</span>
+              <button className="answer-close" onClick={() => setShowQuiz(false)}>✕</button>
+            </div>
+            <div className="quiz-body">
+              <p className="quiz-question">{quiz.a} + {quiz.b} = ?</p>
+              {quizWrong && <p className="quiz-wrong">❌ 틀렸어요! 다시 풀어보세요</p>}
+              <input
+                className="quiz-input"
+                type="number"
+                value={quizInput}
+                onChange={e => { setQuizInput(e.target.value); setQuizWrong(false) }}
+                onKeyDown={e => e.key === 'Enter' && submitQuiz()}
+                placeholder="정답 입력..."
+                autoFocus
+              />
+              <button className="quiz-submit" onClick={submitQuiz}>확인 ✓</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 정답 이미지 모달 */}
       {showAnswer && (

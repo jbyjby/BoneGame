@@ -147,3 +147,49 @@ body {
   max-height: 80vh;
   object-fit: contain;
 }
+
+/* ── 퀴즈 모달 ───────────────────────────────────────────── */
+.quiz-box {
+  min-width: 300px;
+}
+.quiz-body {
+  padding: 28px 28px 24px;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+}
+.quiz-question {
+  font-size: 40px; font-weight: 800;
+  color: #5a3d1a;
+  letter-spacing: 0.06em;
+}
+.quiz-wrong {
+  font-size: 14px; color: #c0392b;
+  font-weight: 600;
+  animation: shake 0.3s ease;
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25%      { transform: translateX(-6px); }
+  75%      { transform: translateX(6px); }
+}
+.quiz-input {
+  width: 140px;
+  padding: 10px 14px;
+  font-size: 22px; font-weight: 700; text-align: center;
+  border: 2px solid #c4a84a;
+  border-radius: 10px;
+  outline: none;
+  background: #fffde8;
+  color: #3a2a0a;
+}
+.quiz-input:focus { border-color: #7a5020; box-shadow: 0 0 0 3px rgba(122,80,32,0.18); }
+.quiz-submit {
+  background: #4a6830;
+  color: #f5e8c8;
+  border: none; border-radius: 10px;
+  padding: 10px 28px;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.quiz-submit:hover  { background: #324818; transform: translateY(-1px); }
+.quiz-submit:active { transform: translateY(0); }
