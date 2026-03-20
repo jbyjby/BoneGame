@@ -83,7 +83,7 @@ export default function BoneGame() {
             resolve({ idx, w: cropped.width, h: cropped.height, canvas: cropped })
           }
           img.onerror = () => resolve({ idx, w: 10, h: 10, canvas: document.createElement('canvas') })
-          img.src = `/bones/${f}`
+          img.src = `${import.meta.env.BASE_URL}bones/${f}`
         }))
       )
       if (cancelled) return
@@ -258,7 +258,7 @@ export default function BoneGame() {
               <span>정답 골격</span>
               <button className="answer-close" onClick={() => setShowAnswer(false)}>✕</button>
             </div>
-            <img src="/reference.png" alt="정답 골격" className="answer-img" />
+            <img src={`${import.meta.env.BASE_URL}reference.png`} alt="정답 골격" className="answer-img" />
           </div>
         </div>
       )}
